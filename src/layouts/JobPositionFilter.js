@@ -8,7 +8,7 @@ function JobPositionFilter() {
   useEffect(() => {
     let jobPositionService = new JobPositionService();
     jobPositionService
-      .getJobPosition()
+      .getJobPositions()
       .then((result) => setJobPositions(result.data.data));
   }, []);
 

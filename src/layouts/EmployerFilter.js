@@ -8,7 +8,7 @@ function EmployerFilter() {
   useEffect(() => {
     let employerService = new EmployerService();
     employerService
-      .getEmployer()
+      .getEmployers()
       .then((result) => setEmployers(result.data.data));
   }, []);
 

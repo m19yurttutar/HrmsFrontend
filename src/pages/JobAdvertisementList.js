@@ -13,7 +13,7 @@ function JobAdvertisementList() {
   useEffect(() => {
     let jobAdvertisementService = new JobAdvertisementService();
     jobAdvertisementService
-      .getJobAdvertisement()
+      .getJobAdvertisements()
       .then((result) => setJobAdvertisements(result.data.data));
   }, []);
 

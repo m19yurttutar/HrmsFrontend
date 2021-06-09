@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export default class WorkExperienceService{
-    getWorkExperience(){
+    getWorkExperiences(){
         return axios.get("http://localhost:8080/api/workExperiences/getAll")
     }
 }

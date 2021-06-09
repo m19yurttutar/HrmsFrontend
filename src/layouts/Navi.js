@@ -6,11 +6,12 @@ import {
   Menu,
 } from "semantic-ui-react";
 import React from "react";
+import './Navi.css'
 
 function Navi() {
   return (
     <div>
-      <Menu className="bg-dark" fixed="top" stackable>
+      <Menu className="Navi" stackable>
         <Container>
           <Menu.Menu position="left">
             <Menu.Item>

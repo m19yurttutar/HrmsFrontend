@@ -7,10 +7,10 @@ function CityFilter() {
 
   useEffect(() => {
     let cityService = new CityService();
-    cityService.getCity().then((result) => setCities(result.data.data));
+    cityService.getCities().then((result) => setCities(result.data.data));
   }, []);
 
-  const cityOptions = [{ key: "0", value: null, text: "Şehir Seç" }];
+  const cityOptions = [{ key: 0, value: null, text: "Şehir Seç" }];
 
   cities.forEach((city) => {
     cityOptions.push({
