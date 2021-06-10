@@ -9,12 +9,12 @@ import {
   Label,
   Input,
 } from "semantic-ui-react";
-import "./RegisterPage.css";
-import GenderService from '../services/GenderService'
+import "../cssFiles/RegisterPage.css";
+import GenderService from '../../services/GenderService'
 
 const genderOptions = [];
 
-function RegisterPage() {
+export default function RegisterPage() {
   const [genders, setGenders] = useState([]);
 
   useEffect(() => {
@@ -152,5 +152,3 @@ function RegisterPage() {
     </div>
   );
 }
-
-export default RegisterPage;

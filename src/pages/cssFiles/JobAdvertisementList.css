@@ -1,0 +1,15 @@
+.MenuItemHeader{
+    color: white !important;
+    background-color: rgb(45, 45, 45) !important;
+    font-weight: bold !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+    width: 110px;
+}
+
+.MenuItem{
+    color: white !important;
+    font-weight: bold !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+}

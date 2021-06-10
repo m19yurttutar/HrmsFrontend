@@ -1,6 +1,6 @@
 .App {
   background-color: #767676;
-  height: 969px;
+  min-height: 969px;
 }
 
 .ItemWriting{
