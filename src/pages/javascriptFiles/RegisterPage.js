@@ -10,27 +10,88 @@ import {
   Input,
 } from "semantic-ui-react";
 import "../cssFiles/RegisterPage.css";
-import GenderService from '../../services/GenderService'
-
-const genderOptions = [];
+import AuthService from "../../services/AuthService";
+import GenderService from "../../services/GenderService";
+import { toast } from "react-toastify";
 
 export default function RegisterPage() {
+  const jobSeeker = {
+    firstName: "",
+    lastName: "",
+    gender: { id: 0 },
+    nationalIdentityNumber: "",
+    birthDate: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  };
+
+  const employer = {
+    companyName: "",
+    website: "",
+    phoneNumber: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  };
+
   const [genders, setGenders] = useState([]);
 
   useEffect(() => {
     let genderService = new GenderService();
     genderService
       .getGenders()
-      .then((result) => setGenders(result.data.data));
+      .then((result) => setGenders(result.data.data))
+      .catch();
   }, []);
 
-  genders.forEach((gender) => {
-    genderOptions.push({
-      key: gender.id,
-      value: gender.id,
-      text: gender.genderName
-    })
-  })
+  var genderOptions = genders.map(function (gender) {
+    return { key: gender.id, text: gender.genderName, value: gender.id };
+  });
+
+  function handleJobSeekerRegister() {
+    var authService = new AuthService();
+    authService
+      .jobSeekerRegister(jobSeeker)
+      .then(function (response) {
+        if (!response.data.success) {
+          toast.error(response.data.message, {
+            position: "bottom-right",
+            autoClose: 4000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+          });
+        } else {
+          alert("Kayıt Başarılı");
+          window.location.reload();
+        }
+      })
+      .catch();
+  }
+
+  function handleEmployerRegister() {
+    var authService = new AuthService();
+    authService
+      .employerRegister(employer)
+      .then(function (response) {
+        if (!response.data.success) {
+          toast.error(response.data.message, {
+            position: "bottom-right",
+            autoClose: 4000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+          });
+        } else {
+          alert("Kayıt Başarılı");
+          window.location.reload();
+        }
+      })
+      .catch();
+  }
 
   return (
     <div className="RegisterPage">
@@ -40,19 +101,23 @@ export default function RegisterPage() {
             <Label color="blue" ribbon>
               <h3 className="Label">İş Arayan</h3>
             </Label>
-            <Form>
+            <Form className="mt-2">
               <Form.Group widths="equal">
                 <Form.Input
                   icon="user"
                   iconPosition="left"
                   label="Ad"
                   placeholder="Ad"
+                  required
+                  onChange={(e) => (jobSeeker.firstName = e.target.value)}
                 />
                 <Form.Input
                   icon="user"
                   iconPosition="left"
                   label="Soyad"
                   placeholder="Soyad"
+                  required
+                  onChange={(e) => (jobSeeker.lastName = e.target.value)}
                 />
               </Form.Group>
               <Form.Group widths="equal">
@@ -61,12 +126,18 @@ export default function RegisterPage() {
                   iconPosition="left"
                   label="Doğum Tarihi"
                   placeholder="YYYY-AA-GG"
+                  required
+                  onChange={(e) => (jobSeeker.birthDate = e.target.value)}
                 />
                 <Form.Select
                   fluid
                   label="Cinsiyet"
                   options={genderOptions}
                   placeholder="Cinsiyet"
+                  required
+                  onChange={(e, { value }) =>
+                    (jobSeeker.gender = { id: value })
+                  }
                 />
               </Form.Group>
               <Form.Input
@@ -74,12 +145,18 @@ export default function RegisterPage() {
                 iconPosition="left"
                 label="T.C. Kimlik Numarası"
                 placeholder="T.C. Kimlik Numarası"
+                required
+                onChange={(e) =>
+                  (jobSeeker.nationalIdentityNumber = e.target.value)
+                }
               />
               <Form.Input
                 icon="at"
                 iconPosition="left"
                 label="E-posta"
                 placeholder="E-posta"
+                required
+                onChange={(e) => (jobSeeker.email = e.target.value)}
               />
               <Form.Input
                 icon="lock"
@@ -87,6 +164,17 @@ export default function RegisterPage() {
                 label="Şifre"
                 placeholder="Şifre"
                 type="password"
+                required
+                onChange={(e) => (jobSeeker.password = e.target.value)}
+              />
+              <Form.Input
+                icon="lock"
+                iconPosition="left"
+                label="Şifre Tekrarı"
+                placeholder="Şifre Tekrarı"
+                type="password"
+                required
+                onChange={(e) => (jobSeeker.confirmPassword = e.target.value)}
               />
               <Form.Field>
                 <Checkbox label="Hizmet sözleşmesini onaylıyorum." />
@@ -97,7 +185,12 @@ export default function RegisterPage() {
               <Form.Field>
                 <Checkbox label="Bilgilerimi Açık Rıza Metni'nde belirtilen şekilde işlenmesine onay veriyorum." />
               </Form.Field>
-              <Button attached="bottom" content="KAYDOL" primary />
+              <Button
+                attached="bottom"
+                content="İş Arayan Olarak Kaydol"
+                onClick={handleJobSeekerRegister}
+                primary
+              />
             </Form>
           </Grid.Column>
 
@@ -105,27 +198,40 @@ export default function RegisterPage() {
             <Label color="red" ribbon="right">
               <h3 className="Label">İş Veren</h3>
             </Label>
-            <Form>
+            <Form className="mt-2">
               <Form.Input
+                name="companyName"
                 icon="building"
                 iconPosition="left"
                 label="Şirket Adı"
                 placeholder="Şirket Adı"
+                required
+                onChange={(e) => (employer.companyName = e.target.value)}
               />
-              <Form.Input label="Website">
-                <Input label="http://" placeholder="www.hrms.com" />
+              <Form.Input label="Website" required>
+                <Input
+                  label="http://"
+                  placeholder="www.hrms.com"
+                  onChange={(e) =>
+                    (employer.website = `http://${e.target.value}`)
+                  }
+                />
               </Form.Input>
               <Form.Input
                 icon="phone"
                 iconPosition="left"
                 label="Telefon Numarası"
                 placeholder="000-000-0000"
+                required
+                onChange={(e) => (employer.phoneNumber = e.target.value)}
               />
               <Form.Input
                 icon="at"
                 iconPosition="left"
                 label="E-posta"
                 placeholder="E-posta"
+                required
+                onChange={(e) => (employer.email = e.target.value)}
               />
               <Form.Input
                 icon="lock"
@@ -133,6 +239,17 @@ export default function RegisterPage() {
                 label="Şifre"
                 placeholder="Şifre"
                 type="password"
+                required
+                onChange={(e) => (employer.password = e.target.value)}
+              />
+              <Form.Input
+                icon="lock"
+                iconPosition="left"
+                label="Şifre Tekrarı"
+                placeholder="Şifre Tekrarı"
+                type="password"
+                required
+                onChange={(e) => (employer.confirmPassword = e.target.value)}
               />
               <Form.Field>
                 <Checkbox label="Hizmet sözleşmesini onaylıyorum." />
@@ -143,7 +260,12 @@ export default function RegisterPage() {
               <Form.Field>
                 <Checkbox label="Bilgilerimi Açık Rıza Metni'nde belirtilen şekilde işlenmesine onay veriyorum." />
               </Form.Field>
-              <Button attached="bottom" content="KAYDOL" color="red" />
+              <Button
+                attached="bottom"
+                content="İş Veren Olarak Kaydol"
+                color="red"
+                onClick={handleEmployerRegister}
+              />
             </Form>
           </Grid.Column>
         </Grid>

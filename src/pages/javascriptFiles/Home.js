@@ -6,7 +6,7 @@ import Sidebar from "./Sidebar";
 export default function Home() {
   return (
     <div>
-      <Grid className="pt-5">
+      <Grid>
         <GridRow>
           <GridColumn width={12}>
             <JobAdvertisementList />

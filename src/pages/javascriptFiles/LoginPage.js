@@ -11,6 +11,7 @@ import {
   Image,
   Checkbox
 } from "semantic-ui-react";
+import { Link } from "react-router-dom";
 
 export default function LoginPage() {
   return (
@@ -51,6 +52,8 @@ export default function LoginPage() {
               </Form>
               <Divider className="mt-4" horizontal content="Ya da" />
               <Button
+                as={Link}
+                to="/register"
                 className="my-5"
                 content="Üye Ol"
                 icon="signup"

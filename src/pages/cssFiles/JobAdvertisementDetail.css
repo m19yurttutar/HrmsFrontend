@@ -1,0 +1,10 @@
+.jobAdvertisementDetailContainer{
+    background-color: white;
+    padding: 1.25em;
+    border-radius: 8px;
+}
+
+.jobDetailCardsContainer{
+    padding-left: 100px;
+    padding-right: 100px;
+}

@@ -13,3 +13,16 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     text-align: center;
 }
+
+.ItemWriting{
+    color: white;
+}
+
+.JobSummaryDiv{
+    color: white;
+    min-height: 100px;
+}
+
+.JobAdvertisementLabel{
+    min-height: 24px;
+}

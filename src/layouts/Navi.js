@@ -1,4 +1,4 @@
-import { Button, Container, Icon, IconGroup, Menu } from "semantic-ui-react";
+import { Container, Icon, IconGroup, Menu } from "semantic-ui-react";
 import React, { useState } from "react";
 import "./Navi.css";
 import NaviSignedOut from "./NaviSignedOut";
@@ -9,12 +9,12 @@ export default function Navi() {
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  function handleSingOut(params) {
+  function handleSingOut() {
     setIsAuthenticated(false)
   }
 
-  function handleSingIn(params) {
-    setIsAuthenticated(true)
+  function handleSingIn() {
+    setIsAuthenticated(false)
   }
 
   return (

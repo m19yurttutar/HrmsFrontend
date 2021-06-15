@@ -8,4 +8,8 @@ export default class JobAdvertisementService{
     getById(id){
         return axios.get(`http://localhost:8080/api/jobAdvertisements/getById?id=${id}`)
     }
+
+    add(jobAdvertisement){
+        return axios.post(`http://localhost:8080/api/jobAdvertisements/add`, jobAdvertisement)
+    }
 }

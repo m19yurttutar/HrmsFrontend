@@ -18,7 +18,8 @@ export default function JobAdvertisementList() {
     let jobAdvertisementService = new JobAdvertisementService();
     jobAdvertisementService
       .getAll()
-      .then((result) => setJobAdvertisements(result.data.data));
+      .then((result) => setJobAdvertisements(result.data.data))
+      .catch();
   }, []);
 
   return (
@@ -55,8 +56,8 @@ export default function JobAdvertisementList() {
             <Item.Content>
               <Item.Extra>
                 <LabelGroup circular>
-                  <Label attached="top right" color="green">
-                    {jobAdvertisement.releaseDate}
+                  <Label attached="top right" color="red">
+                    {jobAdvertisement.applicationDeadline}
                   </Label>
                 </LabelGroup>
               </Item.Extra>
@@ -73,15 +74,13 @@ export default function JobAdvertisementList() {
                 </h5>
               </Item.Meta>
               <Item.Description>
-                <div className="ItemWriting">
-                  {jobAdvertisement.jobDescription}
-                </div>
+                <div className="JobSummaryDiv">{jobAdvertisement.jobSummary}</div>
               </Item.Description>
               <Item.Extra>
-                <LabelGroup circular>
-                  <Label color="blue">{jobAdvertisement.city.cityName}</Label>
-                  <Label attached="bottom right" color="red">
-                    {jobAdvertisement.applicationDeadline}
+                <LabelGroup className="JobAdvertisementLabel" circular>
+                  <Label attached="bottom left" color="blue">{jobAdvertisement.city.cityName}</Label>
+                  <Label attached="bottom right" color="green">
+                    {jobAdvertisement.releaseDate}
                   </Label>
                 </LabelGroup>
               </Item.Extra>
