@@ -48,7 +48,12 @@ export default function JobAdvertisementList() {
           </Grid.Column>
         </Menu>
         {jobAdvertisements.map((jobAdvertisement) => (
-          <Item key={jobAdvertisement.id} className="bg-dark rounded px-3 py-3">
+          <Item
+            key={jobAdvertisement.id}
+            className="bg-dark rounded px-3 py-3"
+            as={Link}
+            to={`jobAdvertisements/${jobAdvertisement.id}`}
+          >
             <ItemImage
               className="pt-3"
               src={jobAdvertisement.employer.profilePhoto.url}
@@ -61,24 +66,26 @@ export default function JobAdvertisementList() {
                   </Label>
                 </LabelGroup>
               </Item.Extra>
-              <Link to={`jobAdvertisements/${jobAdvertisement.id}`}>
-                <Item.Header>
-                  <h3 className="ItemWriting">
-                    {jobAdvertisement.jobPosition.jobPositionName}
-                  </h3>
-                </Item.Header>
-              </Link>
+              <Item.Header>
+                <h3 className="ItemWriting">
+                  {jobAdvertisement.jobPosition?.jobPositionName}
+                </h3>
+              </Item.Header>
               <Item.Meta>
                 <h5 className="ItemWriting">
-                  {jobAdvertisement.employer.companyName}
+                  {jobAdvertisement.employer?.companyName}
                 </h5>
               </Item.Meta>
               <Item.Description>
-                <div className="JobSummaryDiv">{jobAdvertisement.jobSummary}</div>
+                <div className="JobSummaryDiv">
+                  {jobAdvertisement.jobSummary}
+                </div>
               </Item.Description>
               <Item.Extra>
                 <LabelGroup className="JobAdvertisementLabel" circular>
-                  <Label attached="bottom left" color="blue">{jobAdvertisement.city.cityName}</Label>
+                  <Label attached="bottom left" color="blue">
+                    {jobAdvertisement.city.cityName}
+                  </Label>
                   <Label attached="bottom right" color="green">
                     {jobAdvertisement.releaseDate}
                   </Label>

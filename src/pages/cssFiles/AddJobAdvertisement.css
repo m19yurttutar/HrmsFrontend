@@ -1,16 +1,16 @@
 .Header{
-    margin-left: 42.5% !important;
-    margin-right: 42.5% !important;
+    text-align: center;
 }
 
-.Button{
+.addJobAdvertisementButton{
     margin-top: 2em !important;
     border-radius: 8px !important;
-    font-size: large !important;
+    text-align: center;
 }
 
 .AddJobAdvertisementContainer{
-    background-color: #343a40;
+    background-color: white;
     padding: 2em;
     border-radius: 8px;
+    margin-top: 40px;
 }

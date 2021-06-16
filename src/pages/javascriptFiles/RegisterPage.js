@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  Button,
   Divider,
   Form,
   Grid,
@@ -16,23 +15,23 @@ import { toast } from "react-toastify";
 
 export default function RegisterPage() {
   const jobSeeker = {
-    firstName: "",
-    lastName: "",
-    gender: { id: 0 },
-    nationalIdentityNumber: "",
-    birthDate: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+    firstName: null,
+    lastName: null,
+    gender: null,
+    nationalIdentityNumber: null,
+    birthDate: null,
+    email: null,
+    password: null,
+    confirmPassword: null,
   };
 
   const employer = {
-    companyName: "",
-    website: "",
-    phoneNumber: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+    companyName: null,
+    website: null,
+    phoneNumber: null,
+    email: null,
+    password: null,
+    confirmPassword: null,
   };
 
   const [genders, setGenders] = useState([]);
@@ -50,25 +49,33 @@ export default function RegisterPage() {
   });
 
   function handleJobSeekerRegister() {
-    var authService = new AuthService();
-    authService
-      .jobSeekerRegister(jobSeeker)
-      .then(function (response) {
-        if (!response.data.success) {
-          toast.error(response.data.message, {
-            position: "bottom-right",
-            autoClose: 4000,
-            hideProgressBar: false,
-            closeOnClick: false,
-            pauseOnHover: true,
-            draggable: true,
-          });
-        } else {
-          alert("Kayıt Başarılı");
-          window.location.reload();
-        }
-      })
-      .catch();
+    console.log(jobSeeker);
+    // var authService = new AuthService();
+    // authService
+    //   .jobSeekerRegister(jobSeeker)
+    //   .then(function (response) {
+    //     if (!response.data.success) {
+    //       toast.error(response.data.message, {
+    //         position: "bottom-right",
+    //         autoClose: 4000,
+    //         hideProgressBar: false,
+    //         closeOnClick: false,
+    //         pauseOnHover: true,
+    //         draggable: true,
+    //       });
+    //     } else {
+    //       toast.success("Kayıt Başarıyla Gerçekeşti.", {
+    //         position: "bottom-right",
+    //         autoClose: 4000,
+    //         hideProgressBar: false,
+    //         closeOnClick: false,
+    //         pauseOnHover: true,
+    //         draggable: true,
+    //       });
+    //       setValue(null);
+    //     }
+    //   })
+    //   .catch();
   }
 
   function handleEmployerRegister() {
@@ -86,8 +93,14 @@ export default function RegisterPage() {
             draggable: true,
           });
         } else {
-          alert("Kayıt Başarılı");
-          window.location.reload();
+          toast.success("Kayıt Başarıyla Gerçekleşti.", {
+            position: "bottom-right",
+            autoClose: 4000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+          });
         }
       })
       .catch();
@@ -101,7 +114,7 @@ export default function RegisterPage() {
             <Label color="blue" ribbon>
               <h3 className="Label">İş Arayan</h3>
             </Label>
-            <Form className="mt-2">
+            <Form onSubmit={handleJobSeekerRegister} className="mt-2">
               <Form.Group widths="equal">
                 <Form.Input
                   icon="user"
@@ -130,14 +143,11 @@ export default function RegisterPage() {
                   onChange={(e) => (jobSeeker.birthDate = e.target.value)}
                 />
                 <Form.Select
-                  fluid
                   label="Cinsiyet"
                   options={genderOptions}
                   placeholder="Cinsiyet"
                   required
-                  onChange={(e, { value }) =>
-                    (jobSeeker.gender = { id: value })
-                  }
+                  onChange={(e, { value }) => (jobSeeker.gender = { id: value })}
                 />
               </Form.Group>
               <Form.Input
@@ -185,12 +195,7 @@ export default function RegisterPage() {
               <Form.Field>
                 <Checkbox label="Bilgilerimi Açık Rıza Metni'nde belirtilen şekilde işlenmesine onay veriyorum." />
               </Form.Field>
-              <Button
-                attached="bottom"
-                content="İş Arayan Olarak Kaydol"
-                onClick={handleJobSeekerRegister}
-                primary
-              />
+              <Form.Button fluid content="İş Arayan Olarak Kaydol" primary />
             </Form>
           </Grid.Column>
 
@@ -260,8 +265,8 @@ export default function RegisterPage() {
               <Form.Field>
                 <Checkbox label="Bilgilerimi Açık Rıza Metni'nde belirtilen şekilde işlenmesine onay veriyorum." />
               </Form.Field>
-              <Button
-                attached="bottom"
+              <Form.Button
+                fluid
                 content="İş Veren Olarak Kaydol"
                 color="red"
                 onClick={handleEmployerRegister}

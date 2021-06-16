@@ -1,226 +1,352 @@
 import React, { useEffect, useState } from "react";
-import { Form, Label, Container, Button } from "semantic-ui-react";
-import JobPositionService from "../../services/JobPositionService";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { Container, Form, Label, Popup } from "semantic-ui-react";
 import CityService from "../../services/CityService";
-import WorkingTypeService from "../../services/WorkingTypeService";
+import JobPositionService from "../../services/JobPositionService";
 import WorkingTimeService from "../../services/WorkingTimeService";
+import WorkingTypeService from "../../services/WorkingTypeService";
 import JobAdvertisementService from "../../services/JobAdvertisementService";
 import "../cssFiles/AddJobAdvertisement.css";
 import { toast } from "react-toastify";
 
-export default function AddJobAdvertisement() {
-  const [jobPositions, setJobPositions] = useState([]);
-  const [cities, setCities] = useState([]);
-  const [workingTypes, setWorkingTypes] = useState([]);
+export default function JobAdCreate() {
   const [workingTimes, setWorkingTimes] = useState([]);
+  const [workingTypes, setWorkingTypes] = useState([]);
+  const [cities, setCities] = useState([]);
+  const [jobPositions, setJobPositions] = useState([]);
 
-  const jobAdvertisement = {
-    applicationDeadline: "",
-    city: { id: 0 },
-    jobSummary: "",
-    jobDescription: "",
-    jobPosition: { id: 0 },
-    maxSalary: 0,
-    minSalary: 0,
-    vacantPositionCount: 0,
-    workingTime: { id: 0 },
-    workingType: { id: 0 },
-  };
+  const JobAdvertisementSchema = Yup.object().shape({
+    jobPositionId: Yup.number().required("Bu alan boş bırakılamaz"),
+    cityId: Yup.number().required("Bu alan boş bırakılamaz"),
+    workingTypeId: Yup.number().required("Bu alan boş bırakılamaz"),
+    workingTimeId: Yup.number().required("Bu alan boş bırakılamaz"),
+    vacantPositionCount: Yup.number()
+      .required("Bu alan boş bırakılamaz")
+      .min(1, "En az 1 kişilik boş pozisyon olmak zorunda!"),
+    applicationDeadline: Yup.string()
+      .matches(
+        /^(19|20)\d\d[-](0[1-9]|1[012])[-](0[1-9]|[12][0-9]|3[01])$/,
+        "Girmiş olduğunuz son başvuru tarihi, tarih formatında değildir.(YYYY-AA-GG)"
+      )
+      .required("Bu alan boş bırakılamaz!"),
+    jobSummary: Yup.string().required("Bu alan boş bırakılamaz!"),
+    jobDescription: Yup.string().required("Bu alan boş bırakılamaz!"),
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      jobPositionId: "",
+      cityId: "",
+      workingTypeId: "",
+      workingTimeId: "",
+      vacantPositionCount: "",
+      minSalary: "",
+      maxSalary: "",
+      applicationDeadline: "",
+      jobSummary: "",
+      jobDescription: "",
+    },
+    validationSchema: JobAdvertisementSchema,
+    onSubmit: (jobAdvertisement) => {
+      jobAdvertisement.jobPositionId = parseInt(jobAdvertisement.jobPositionId);
+      jobAdvertisement.cityId = parseInt(jobAdvertisement.cityId);
+      jobAdvertisement.workingTypeId = parseInt(jobAdvertisement.workingTypeId);
+      jobAdvertisement.workingTimeId = parseInt(jobAdvertisement.workingTimeId);
+      jobAdvertisement.vacantPositionCount = parseInt(
+        jobAdvertisement.vacantPositionCount
+      );
+      jobAdvertisement.minSalary = parseInt(jobAdvertisement.minSalary);
+      jobAdvertisement.maxSalary = parseInt(jobAdvertisement.maxSalary);
+
+      let jobAdvertisementService = new JobAdvertisementService();
+
+      jobAdvertisementService.add(jobAdvertisement).then(function (response) {
+        if (!response.data.success) {
+          toast.error(response.data.message, {
+            position: "bottom-right",
+            autoClose: 4000,
+            hideProgressBar: false,
+            closeOnClick: false,
+          });
+        } else {
+          toast.success(response.data.message, {
+            position: "bottom-right",
+            autoClose: 4000,
+            hideProgressBar: false,
+            closeOnClick: false,
+          });
+          document.getElementById("addJobAdvertisementForm").reset();
+        }
+      });
+    },
+  });
 
   useEffect(() => {
+    let workingTimeService = new WorkingTimeService();
+    let workingTypeService = new WorkingTypeService();
+    let cityService = new CityService();
     let jobPositionService = new JobPositionService();
+
+    workingTimeService
+      .getWorkingTimes()
+      .then((result) => setWorkingTimes(result.data.data));
+    workingTypeService
+      .getWorkingTypes()
+      .then((result) => setWorkingTypes(result.data.data));
+    cityService.getCities().then((result) => setCities(result.data.data));
     jobPositionService
       .getJobPositions()
       .then((result) => setJobPositions(result.data.data));
   }, []);
-  useEffect(() => {
-    let cityService = new CityService();
-    cityService.getCities().then((result) => setCities(result.data.data));
-  }, []);
-  useEffect(() => {
-    let workingTypeService = new WorkingTypeService();
-    workingTypeService
-      .getWorkingTypes()
-      .then((result) => setWorkingTypes(result.data.data));
-  }, []);
-  useEffect(() => {
-    let workingTimeService = new WorkingTimeService();
-    workingTimeService
-      .getWorkingTimes()
-      .then((result) => setWorkingTimes(result.data.data));
-  }, []);
 
-  var jobPositionOptions = jobPositions.map(function (jobPosition) {
-    return {
-      key: jobPosition.id,
-      text: jobPosition.jobPositionName,
-      value: jobPosition.id,
-    };
-  });
-  var citiesOptions = cities.map(function (city) {
-    return { key: city.id, text: city.cityName, value: city.id };
-  });
-  var workingTypesOptions = workingTypes.map(function (workingType) {
-    return {
-      key: workingType.id,
-      text: workingType.workingTypeName,
-      value: workingType.id,
-    };
-  });
-  var workingTimesOptions = workingTimes.map(function (workingTime) {
-    return {
-      key: workingTime.id,
-      text: workingTime.workingTimeName,
-      value: workingTime.id,
-    };
-  });
+  const workingTimeOptions = workingTimes.map((workingTime) => ({
+    key: workingTime.id,
+    text: workingTime.workingTimeName,
+    value: workingTime.id,
+  }));
+  const workingTypeOptions = workingTypes.map((workingType) => ({
+    key: workingType.id,
+    text: workingType.workingTypeName,
+    value: workingType.id,
+  }));
+  const cityOptions = cities.map((city) => ({
+    key: city.id,
+    text: city.cityName,
+    value: city.id,
+  }));
+  const jobPositionOptions = jobPositions.map((jobPosition) => ({
+    key: jobPosition.id,
+    text: jobPosition.jobPositionName,
+    value: jobPosition.id,
+  }));
 
-  function addJobAdvertisement() {
-    let jobAdvertisementService = new JobAdvertisementService();
-    jobAdvertisementService.add(jobAdvertisement).then(function (response) {
-      if (!response.data.success) {
-        toast.error(response.data.message, {
-          position: "bottom-right",
-          autoClose: 4000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-        });
-      } else {
-        toast.success(response.data.message, {
-          position: "bottom-right",
-          autoClose: 4000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-        });
-      }
-    });
-  }
+  const handleChangeSemantic = (value, fieldName) => {
+    formik.setFieldValue(fieldName, value);
+  };
 
   return (
     <div>
       <Container className="AddJobAdvertisementContainer">
-        <Label className="Header" color="teal">
-          <h3 className="Label">Yeni İş İlanı</h3>
-        </Label>
-        <Form className="mt-5" inverted>
-          <Form.Group widths="equal">
-            <Form.Select
-              id="jobPositionsDropdown"
+        <Form id="addJobAdvertisementForm" onSubmit={formik.handleSubmit}>
+          <Form.Field className="Header">
+            <Label size="massive" color="teal" content="Yeni İş İlanı"></Label>
+          </Form.Field>
+          <Form.Field className="mt-4">
+            <Form.Group widths="equal">
+              <Form.Field>
+                <Form.Select
+                  label="İş Pozisyonu*"
+                  clearable
+                  placeholder="İş Pozisyonu Seç"
+                  search
+                  onChange={(event, data) =>
+                    handleChangeSemantic(data.value, "jobPositionId")
+                  }
+                  onBlur={formik.onBlur}
+                  id="jobPositionId"
+                  value={formik.values.jobPositionId}
+                  options={jobPositionOptions}
+                />
+                {formik.errors.jobPositionId &&
+                  formik.touched.jobPositionId && (
+                    <div className={"ui pointing red basic label"}>
+                      {formik.errors.cityId}
+                    </div>
+                  )}
+              </Form.Field>
+              <Form.Field>
+                <Form.Select
+                  clearable
+                  label="Şehir*"
+                  placeholder="Şehir Seç"
+                  search
+                  onChange={(event, data) =>
+                    handleChangeSemantic(data.value, "cityId")
+                  }
+                  onBlur={formik.onBlur}
+                  id="cityId"
+                  value={formik.values.cityId}
+                  options={cityOptions}
+                />
+                {formik.errors.cityId && formik.touched.cityId && (
+                  <div className={"ui pointing red basic label"}>
+                    {formik.errors.cityId}
+                  </div>
+                )}
+              </Form.Field>
+              <Form.Field>
+                <Form.Select
+                  clearable
+                  label="Çalışma Türü*"
+                  placeholder="Çalışma Türü Seç"
+                  search
+                  selection
+                  onChange={(event, data) =>
+                    handleChangeSemantic(data.value, "workingTypeId")
+                  }
+                  onBlur={formik.onBlur}
+                  id="workingTypeId"
+                  value={formik.values.workingTypeId}
+                  options={workingTypeOptions}
+                />
+                {formik.errors.workingTypeId &&
+                  formik.touched.workingTypeId && (
+                    <div className={"ui pointing red basic label"}>
+                      {formik.errors.workingTypeId}
+                    </div>
+                  )}
+              </Form.Field>
+              <Form.Field>
+                <Form.Select
+                  clearable
+                  label="Çalışma Zamanı*"
+                  placeholder="Çalışma Zamanı Seç"
+                  search
+                  selection
+                  onChange={(event, data) =>
+                    handleChangeSemantic(data.value, "workingTimeId")
+                  }
+                  onBlur={formik.onBlur}
+                  id="workingTimeId"
+                  value={formik.values.workingTimeId}
+                  options={workingTimeOptions}
+                />
+                {formik.errors.workingTimeId &&
+                  formik.touched.workingTimeId && (
+                    <div className={"ui pointing red basic label"}>
+                      {formik.errors.workingTimeId}
+                    </div>
+                  )}
+              </Form.Field>
+            </Form.Group>
+          </Form.Field>
+          <Form.Field className="mt-4">
+            <Form.Group widths="equal">
+              <Form.Field>
+                <Form.Input
+                  icon="user plus"
+                  iconPosition="left"
+                  label="Boş Pozisyon Sayısı*"
+                  id="vacantPositionCount"
+                  name="vacantPositionCount"
+                  onChange={formik.handleChange}
+                  value={formik.values.vacantPositionCount}
+                  onBlur={formik.handleBlur}
+                  type="number"
+                  placeholder="Boş Pozisyon Sayısı Gir"
+                />
+                {formik.errors.vacantPositionCount &&
+                  formik.touched.vacantPositionCount && (
+                    <div className={"ui pointing red basic label"}>
+                      {formik.errors.vacantPositionCount}
+                    </div>
+                  )}
+              </Form.Field>
+              <Form.Field>
+                <Form.Input
+                  icon="lira"
+                  iconPosition="left"
+                  label="En Düşük Ücret"
+                  type="number"
+                  placeholder="En Düşük Ücret Gir"
+                  value={formik.values.minSalary}
+                  name="minSalary"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+                {formik.errors.minSalary && formik.touched.minSalary && (
+                  <div className={"ui pointing red basic label"}>
+                    {formik.errors.minSalary}
+                  </div>
+                )}
+              </Form.Field>
+              <Form.Field>
+                <Form.Input
+                  icon="lira"
+                  iconPosition="left"
+                  type="number"
+                  label="En Yüksek Ücret"
+                  placeholder="En Yüksek Ücret Gir"
+                  value={formik.values.maxSalary}
+                  name="maxSalary"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+                {formik.errors.maxSalary && formik.touched.maxSalary && (
+                  <div className={"ui pointing red basic label"}>
+                    {formik.errors.maxSalary}
+                  </div>
+                )}
+              </Form.Field>
+              <Form.Field>
+                <Form.Input
+                  label="Son Başvuru Tarihi*"
+                  placeholder="YYYY-AA-GG"
+                  icon="calendar alternate"
+                  iconPosition="left"
+                  onChange={(event, data) =>
+                    handleChangeSemantic(data.value, "applicationDeadline")
+                  }
+                  value={formik.values.applicationDeadline}
+                  onBlur={formik.handleBlur}
+                  name="applicationDeadline"
+                />
+                {formik.errors.applicationDeadline &&
+                  formik.touched.applicationDeadline && (
+                    <div className={"ui pointing red basic label"}>
+                      {formik.errors.applicationDeadline}
+                    </div>
+                  )}
+              </Form.Field>
+            </Form.Group>
+          </Form.Field>
+          <Form.Field className="mt-4">
+            <Form.TextArea
+              maxLength="450"
+              placeholder="İş Özeti Gir (**Bu metin iş ilanları listelenirken gözükecek metindir**)"
+              label="İş Özeti*"
+              style={{ minHeight: "100px", maxHeight: "100px" }}
+              value={formik.values.jobSummary}
+              name="jobSummary"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+            />
+            {formik.errors.jobSummary && formik.touched.jobSummary && (
+              <div className={"ui pointing red basic label"}>
+                {formik.errors.jobSummary}
+              </div>
+            )}
+          </Form.Field>
+          <Form.Field className="mt-4">
+            <Form.TextArea
+              placeholder="İş Tanımı Gir (**Bu metin iş ilanı detaylarında gözükecek metindir**)"
+              label="İş Tanımı*"
+              style={{ minHeight: "225px", maxHeight: "225px" }}
+              value={formik.values.jobDescription}
+              name="jobDescription"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+            />
+            {formik.errors.jobDescription && formik.touched.jobDescription && (
+              <div className={"ui pointing red basic label"}>
+                {formik.errors.jobDescription}
+              </div>
+            )}
+          </Form.Field>
+          <Form.Field className="mt-4">
+            <Form.Button
               fluid
-              label="İş Pozisyonu"
-              placeholder="İş Pozisyonu Seç"
-              search
-              required
-              options={jobPositionOptions}
-              onChange={(e, { value }) =>
-                (jobAdvertisement.jobPosition = { id: value })
-              }
+              size="big"
+              className="addJobAdvertisementButton"
+              animated
+              content="İş İlanı Ekle"
+              labelPosition="right"
+              icon="add"
+              color="teal"
+              type="submit"
             />
-            <Form.Select
-              id="citiesDropdown"
-              fluid
-              label="Şehir"
-              placeholder="Şehir Seç"
-              search
-              required
-              options={citiesOptions}
-              onChange={(e, { value }) =>
-                (jobAdvertisement.city = { id: value })
-              }
-            />
-            <Form.Select
-              id="workingTypesDropdown"
-              fluid
-              label="Çalışma Türü"
-              placeholder="Çalışma Türü Seç"
-              required
-              options={workingTypesOptions}
-              onChange={(e, { value }) =>
-                (jobAdvertisement.workingType = { id: value })
-              }
-            />
-            <Form.Select
-              id="workingTimesDropdown"
-              fluid
-              label="Çalışma Zamanı"
-              placeholder="Çalışma Zamanı Seç"
-              required
-              options={workingTimesOptions}
-              onChange={(e, { value }) =>
-                (jobAdvertisement.workingTime = { id: value })
-              }
-            />
-          </Form.Group>
-          <Form.Group className="mt-5" widths="equal">
-            <Form.Input
-              icon="user plus"
-              iconPosition="left"
-              label="Boş Pozisyon Sayısı"
-              placeholder="Boş Pozisyon Sayısı Giriniz"
-              required
-              onChange={(e, { value }) =>
-                (jobAdvertisement.vacantPositionCount = parseInt(value))
-              }
-            />
-            <Form.Input
-              icon="lira sign"
-              iconPosition="left"
-              label="En Düşük Ücret"
-              placeholder="En Düşük Ücreti Giriniz"
-              onChange={(e, { value }) =>
-                (jobAdvertisement.minSalary = parseFloat(value))
-              }
-            />
-            <Form.Input
-              icon="lira sign"
-              iconPosition="left"
-              label="En Yüksek Ücret"
-              placeholder="En Yüksek Ücreti Giriniz"
-              onChange={(e, { value }) =>
-                (jobAdvertisement.maxSalary = parseFloat(value))
-              }
-            />
-            <Form.Input
-              icon="calendar alternate"
-              iconPosition="left"
-              label="Son Başvuru Tarihi"
-              placeholder="YYYY-AA-GG"
-              required
-              onChange={(e, { value }) =>
-                (jobAdvertisement.applicationDeadline = value)
-              }
-            />
-          </Form.Group>
-          <Form.TextArea
-            style={{ minHeight: 100, maxHeight: 100 }}
-            className="mt-5"
-            label="İş Özeti"
-            placeholder="İş Özetini Giriniz (Bu alan iş ilanları kısmında gözükecek metindir)"
-            required
-            maxLength="450"
-            onChange={(e, { value }) => (jobAdvertisement.jobSummary = value)}
-          ></Form.TextArea>
-          <Form.TextArea
-            style={{ minHeight: 225, maxHeight: 225 }}
-            className="mt-5"
-            label="İş Tanımı"
-            placeholder="İş Tanımını Giriniz"
-            required
-            onChange={(e, { value }) =>
-              (jobAdvertisement.jobDescription = value)
-            }
-          />
-          <Button
-            onClick={addJobAdvertisement}
-            className="Button"
-            attached="bottom"
-            content="İş İlanı Ekle"
-            color="teal"
-          />
+          </Form.Field>
         </Form>
       </Container>
     </div>

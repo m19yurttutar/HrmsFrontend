@@ -2,3 +2,20 @@
     margin-top: 210px;
     background-color: #343a40 !important;
 }
+
+.loginPageContainer{
+    margin-top: 16% !important;
+    background-color: white;
+    border-radius: 8px;
+}
+
+.loginPageSignUpButton{
+    margin-top: 50px !important;
+    margin-bottom: 50px !important;
+    text-align: center;
+}
+
+.loginFormContainer{
+    background-color:silver;
+    border-radius: 8px;
+}
