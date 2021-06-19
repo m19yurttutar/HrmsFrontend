@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Container, Form, Label, Popup } from "semantic-ui-react";
+import { Container, Form, Label } from "semantic-ui-react";
 import CityService from "../../services/CityService";
 import JobPositionService from "../../services/JobPositionService";
 import WorkingTimeService from "../../services/WorkingTimeService";
@@ -47,15 +47,15 @@ export default function JobAdCreate() {
       jobSummary: "",
       jobDescription: "",
     },
+
     validationSchema: JobAdvertisementSchema,
+
     onSubmit: (jobAdvertisement) => {
       jobAdvertisement.jobPositionId = parseInt(jobAdvertisement.jobPositionId);
       jobAdvertisement.cityId = parseInt(jobAdvertisement.cityId);
       jobAdvertisement.workingTypeId = parseInt(jobAdvertisement.workingTypeId);
       jobAdvertisement.workingTimeId = parseInt(jobAdvertisement.workingTimeId);
-      jobAdvertisement.vacantPositionCount = parseInt(
-        jobAdvertisement.vacantPositionCount
-      );
+      jobAdvertisement.vacantPositionCount = parseInt(jobAdvertisement.vacantPositionCount);
       jobAdvertisement.minSalary = parseInt(jobAdvertisement.minSalary);
       jobAdvertisement.maxSalary = parseInt(jobAdvertisement.maxSalary);
 
@@ -76,7 +76,6 @@ export default function JobAdCreate() {
             hideProgressBar: false,
             closeOnClick: false,
           });
-          document.getElementById("addJobAdvertisementForm").reset();
         }
       });
     },
@@ -144,7 +143,7 @@ export default function JobAdCreate() {
                     handleChangeSemantic(data.value, "jobPositionId")
                   }
                   onBlur={formik.onBlur}
-                  id="jobPositionId"
+                  name="jobPositionId"
                   value={formik.values.jobPositionId}
                   options={jobPositionOptions}
                 />
@@ -165,7 +164,7 @@ export default function JobAdCreate() {
                     handleChangeSemantic(data.value, "cityId")
                   }
                   onBlur={formik.onBlur}
-                  id="cityId"
+                  name="cityId"
                   value={formik.values.cityId}
                   options={cityOptions}
                 />
@@ -186,7 +185,7 @@ export default function JobAdCreate() {
                     handleChangeSemantic(data.value, "workingTypeId")
                   }
                   onBlur={formik.onBlur}
-                  id="workingTypeId"
+                  name="workingTypeId"
                   value={formik.values.workingTypeId}
                   options={workingTypeOptions}
                 />
@@ -208,7 +207,7 @@ export default function JobAdCreate() {
                     handleChangeSemantic(data.value, "workingTimeId")
                   }
                   onBlur={formik.onBlur}
-                  id="workingTimeId"
+                  name="workingTimeId"
                   value={formik.values.workingTimeId}
                   options={workingTimeOptions}
                 />
@@ -228,7 +227,6 @@ export default function JobAdCreate() {
                   icon="user plus"
                   iconPosition="left"
                   label="Boş Pozisyon Sayısı*"
-                  id="vacantPositionCount"
                   name="vacantPositionCount"
                   onChange={formik.handleChange}
                   value={formik.values.vacantPositionCount}

@@ -49,33 +49,31 @@ export default function RegisterPage() {
   });
 
   function handleJobSeekerRegister() {
-    console.log(jobSeeker);
-    // var authService = new AuthService();
-    // authService
-    //   .jobSeekerRegister(jobSeeker)
-    //   .then(function (response) {
-    //     if (!response.data.success) {
-    //       toast.error(response.data.message, {
-    //         position: "bottom-right",
-    //         autoClose: 4000,
-    //         hideProgressBar: false,
-    //         closeOnClick: false,
-    //         pauseOnHover: true,
-    //         draggable: true,
-    //       });
-    //     } else {
-    //       toast.success("Kayıt Başarıyla Gerçekeşti.", {
-    //         position: "bottom-right",
-    //         autoClose: 4000,
-    //         hideProgressBar: false,
-    //         closeOnClick: false,
-    //         pauseOnHover: true,
-    //         draggable: true,
-    //       });
-    //       setValue(null);
-    //     }
-    //   })
-    //   .catch();
+    var authService = new AuthService();
+    authService
+      .jobSeekerRegister(jobSeeker)
+      .then(function (response) {
+        if (!response.data.success) {
+          toast.error(response.data.message, {
+            position: "bottom-right",
+            autoClose: 4000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+          });
+        } else {
+          toast.success("Kayıt Başarıyla Gerçekeşti.", {
+            position: "bottom-right",
+            autoClose: 4000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+          });
+        }
+      })
+      .catch();
   }
 
   function handleEmployerRegister() {
@@ -203,7 +201,7 @@ export default function RegisterPage() {
             <Label color="red" ribbon="right">
               <h3 className="Label">İş Veren</h3>
             </Label>
-            <Form className="mt-2">
+            <Form onSubmit={handleEmployerRegister} className="mt-2">
               <Form.Input
                 name="companyName"
                 icon="building"
@@ -269,7 +267,6 @@ export default function RegisterPage() {
                 fluid
                 content="İş Veren Olarak Kaydol"
                 color="red"
-                onClick={handleEmployerRegister}
               />
             </Form>
           </Grid.Column>

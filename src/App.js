@@ -11,6 +11,7 @@ import JobAdvertisementDetail from "./pages/javascriptFiles/JobAdvertisementDeta
 import AddJobAdvertisement from "./pages/javascriptFiles/AddJobAdvertisement";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import UnconfirmedJobAdvertisementList from "./pages/javascriptFiles/UnconfirmedJobAdvertisementList";
 
 function App() {
   return (
@@ -20,11 +21,9 @@ function App() {
         <Route exact path="/" component={Home} />
         <Route path="/login" component={LoginPage} />
         <Route path="/register" component={RegisterPage} />
-        <Route
-          path="/jobAdvertisements/:id"
-          component={JobAdvertisementDetail}
-        />
+        <Route path="/jobAdvertisements/:id" component={JobAdvertisementDetail}/>
         <Route path="/addJobAdvertisement" component={AddJobAdvertisement} />
+        <Route path="/unconfirmedJobAdvertisements" component={UnconfirmedJobAdvertisementList}/>
       </Container>
       <ToastContainer
         position="bottom-right"

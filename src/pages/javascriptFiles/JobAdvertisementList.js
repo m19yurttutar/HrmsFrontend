@@ -17,7 +17,7 @@ export default function JobAdvertisementList() {
   useEffect(() => {
     let jobAdvertisementService = new JobAdvertisementService();
     jobAdvertisementService
-      .getAll()
+      .getByActivityStatusAndConfirmationStatus()
       .then((result) => setJobAdvertisements(result.data.data))
       .catch();
   }, []);
@@ -56,7 +56,7 @@ export default function JobAdvertisementList() {
           >
             <ItemImage
               className="pt-3"
-              src={jobAdvertisement.employer.profilePhoto.url}
+              src={jobAdvertisement.employer?.profilePhoto.url}
             />
             <Item.Content>
               <Item.Extra>

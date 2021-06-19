@@ -32,7 +32,7 @@ export default function Navi() {
           <Menu.Item as={Link} to="/findJob">
             <h5 className="mx-3 font-weight-bold text-white">İş Ara</h5>
           </Menu.Item>
-          <Menu.Item as={Link} to="/jobPositions">
+          <Menu.Item as={Link} to="/unconfirmedJobAdvertisements">
             <h5 className="mx-3 font-weight-bold text-white">Pozisyonlar</h5>
           </Menu.Item>
           <Menu.Menu position="right">
