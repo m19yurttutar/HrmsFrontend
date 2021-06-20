@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { Container, Form, Label } from "semantic-ui-react";
+import "../cssFiles/AddJobAdvertisement.css";
 import CityService from "../../services/CityService";
 import JobPositionService from "../../services/JobPositionService";
 import WorkingTimeService from "../../services/WorkingTimeService";
 import WorkingTypeService from "../../services/WorkingTypeService";
 import JobAdvertisementService from "../../services/JobAdvertisementService";
-import "../cssFiles/AddJobAdvertisement.css";
+import React, { useEffect, useState } from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { Container, Form, Label } from "semantic-ui-react";
 import { toast } from "react-toastify";
 
 export default function JobAdCreate() {
@@ -127,9 +127,9 @@ export default function JobAdCreate() {
   return (
     <div>
       <Container className="AddJobAdvertisementContainer">
-        <Form id="addJobAdvertisementForm" onSubmit={formik.handleSubmit}>
+        <Form inverted id="addJobAdvertisementForm" onSubmit={formik.handleSubmit}>
           <Form.Field className="Header">
-            <Label size="massive" color="teal" content="Yeni İş İlanı"></Label>
+            <Label size="massive" color="violet" content="Yeni İş İlanı"></Label>
           </Form.Field>
           <Form.Field className="mt-4">
             <Form.Group widths="equal">
@@ -150,7 +150,7 @@ export default function JobAdCreate() {
                 {formik.errors.jobPositionId &&
                   formik.touched.jobPositionId && (
                     <div className={"ui pointing red basic label"}>
-                      {formik.errors.cityId}
+                      {formik.errors.jobPositionId}
                     </div>
                   )}
               </Form.Field>
@@ -341,7 +341,7 @@ export default function JobAdCreate() {
               content="İş İlanı Ekle"
               labelPosition="right"
               icon="add"
-              color="teal"
+              color="violet"
               type="submit"
             />
           </Form.Field>

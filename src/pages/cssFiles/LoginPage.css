@@ -5,7 +5,11 @@
 
 .loginPageContainer{
     margin-top: 16% !important;
-    background-color: white;
+    border-radius: 8px;
+}
+
+.loginImageContainer{
+    background-color: darkgray;
     border-radius: 8px;
 }
 

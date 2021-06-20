@@ -14,7 +14,7 @@ export default function LoginPage() {
   return (
     <div>
       <Container className="loginPageContainer" as={Grid} columns="2">
-        <Grid.Column>
+        <Grid.Column className="loginImageContainer">
           <center>
             <Image
               className="mt-2"

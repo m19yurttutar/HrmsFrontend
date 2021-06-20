@@ -17,7 +17,7 @@ export default function RegisterPage() {
   const jobSeeker = {
     firstName: null,
     lastName: null,
-    gender: null,
+    genderId: null,
     nationalIdentityNumber: null,
     birthDate: null,
     email: null,
@@ -106,13 +106,13 @@ export default function RegisterPage() {
 
   return (
     <div className="RegisterPage">
-      <Segment>
+      <Segment className="bg-dark">
         <Grid columns={2} relaxed="very" stackable>
           <Grid.Column>
             <Label color="blue" ribbon>
               <h3 className="Label">İş Arayan</h3>
             </Label>
-            <Form onSubmit={handleJobSeekerRegister} className="mt-2">
+            <Form inverted onSubmit={handleJobSeekerRegister} className="mt-2">
               <Form.Group widths="equal">
                 <Form.Input
                   icon="user"
@@ -145,7 +145,7 @@ export default function RegisterPage() {
                   options={genderOptions}
                   placeholder="Cinsiyet"
                   required
-                  onChange={(e, { value }) => (jobSeeker.gender = { id: value })}
+                  onChange={(e, data) => (jobSeeker.genderId = data.value)}
                 />
               </Form.Group>
               <Form.Input
@@ -201,7 +201,7 @@ export default function RegisterPage() {
             <Label color="red" ribbon="right">
               <h3 className="Label">İş Veren</h3>
             </Label>
-            <Form onSubmit={handleEmployerRegister} className="mt-2">
+            <Form inverted onSubmit={handleEmployerRegister} className="mt-2">
               <Form.Input
                 name="companyName"
                 icon="building"
@@ -271,7 +271,7 @@ export default function RegisterPage() {
             </Form>
           </Grid.Column>
         </Grid>
-        <Divider vertical>Ya da</Divider>
+        <Divider inverted vertical>Ya da</Divider>
       </Segment>
     </div>
   );

@@ -17,13 +17,12 @@ import "../cssFiles/UnconfirmedJobAdvertisementList.css";
 import Sidebar from "./Sidebar";
 
 export default function UnconfirmedJobAdvertisementList() {
-  const [unconfirmedJobAdvertisements, setUnconfirmedJobAdvertisements] =
-    useState([]);
+  const [unconfirmedJobAdvertisements, setUnconfirmedJobAdvertisements] = useState([]);
 
   useEffect(() => {
     let jobAdvertisementService = new JobAdvertisementService();
     jobAdvertisementService
-      .getUnconfirmedJobAdvertisement()
+      .getUnconfirmedJobAdvertisements()
       .then((response) => setUnconfirmedJobAdvertisements(response.data.data))
       .catch();
   }, []);

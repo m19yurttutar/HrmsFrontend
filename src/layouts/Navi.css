@@ -2,11 +2,3 @@
     height: 69px;
     background-color: #343a40 !important;
 }
-
-.MenuItemSignedOut{
-    top: 10px;
-}
-
-.MenuItemSignedIn{
-    top: 5px;
-}

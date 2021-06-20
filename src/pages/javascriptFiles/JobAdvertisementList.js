@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
-  Grid,
   Item,
   ItemImage,
   Label,
@@ -17,36 +16,28 @@ export default function JobAdvertisementList() {
   useEffect(() => {
     let jobAdvertisementService = new JobAdvertisementService();
     jobAdvertisementService
-      .getByActivityStatusAndConfirmationStatus()
+      .getActiveJobAdvertisements()
       .then((result) => setJobAdvertisements(result.data.data))
       .catch();
   }, []);
 
   return (
     <div>
+      <Menu inverted className="bg-dark">
+        <Menu.Item className="MenuItem">
+          Sırala
+        </Menu.Item>
+        <Menu.Item className="MenuItem" link>
+          Maaş bilgisine göre
+        </Menu.Item>
+        <Menu.Item className="MenuItem" link>
+          Eklenme tarihine göre
+        </Menu.Item>
+        <Menu.Item className="MenuItem" link>
+          Son başvuru tarihine göre
+        </Menu.Item>
+      </Menu>
       <Item.Group>
-        <Menu className="bg-dark" stackable>
-          <Grid.Column>
-            <Menu.Item className="MenuItemHeader" header>
-              <div className="MenuItemHeader">Sırala</div>
-            </Menu.Item>
-          </Grid.Column>
-          <Grid.Column style={{ width: "225px" }}>
-            <Menu.Item className="MenuItem" link>
-              Maaş bilgisine göre
-            </Menu.Item>
-          </Grid.Column>
-          <Grid.Column style={{ width: "230px" }}>
-            <Menu.Item className="MenuItem" link>
-              Eklenme tarihine göre
-            </Menu.Item>
-          </Grid.Column>
-          <Grid.Column style={{ width: "260px" }}>
-            <Menu.Item className="MenuItem" link>
-              Son başvuru tarihine göre
-            </Menu.Item>
-          </Grid.Column>
-        </Menu>
         {jobAdvertisements.map((jobAdvertisement) => (
           <Item
             key={jobAdvertisement.id}

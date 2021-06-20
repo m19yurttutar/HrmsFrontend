@@ -13,12 +13,12 @@ export default function Navi() {
   }
 
   function handleSingIn() {
-    setIsAuthenticated(false);
+    setIsAuthenticated(true);
   }
 
   return (
     <div>
-      <Menu className="Navi" stackable>
+      <Menu inverted className="bg-dark" style={{ height: "69px"}} stackable>
         <Container>
           <Menu.Item as={Link} to="/">
             <Image
@@ -35,13 +35,13 @@ export default function Navi() {
           <Menu.Item as={Link} to="/unconfirmedJobAdvertisements">
             <h5 className="mx-3 font-weight-bold text-white">Pozisyonlar</h5>
           </Menu.Item>
-          <Menu.Menu position="right">
+          <Menu.Item position="right">
             {isAuthenticated ? (
               <NaviSignedIn signOut={handleSingOut} />
             ) : (
               <NaviSignedOut signIn={handleSingIn} />
             )}
-          </Menu.Menu>
+          </Menu.Item>
         </Container>
       </Menu>
     </div>
