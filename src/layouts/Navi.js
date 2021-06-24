@@ -18,7 +18,7 @@ export default function Navi() {
 
   return (
     <div>
-      <Menu inverted className="bg-dark" style={{ height: "69px"}} stackable>
+      <Menu inverted className="bg-dark" style={{ height: "69px" }} stackable>
         <Container>
           <Menu.Item as={Link} to="/">
             <Image
@@ -35,13 +35,17 @@ export default function Navi() {
           <Menu.Item as={Link} to="/unconfirmedJobAdvertisements">
             <h5 className="mx-3 font-weight-bold text-white">Pozisyonlar</h5>
           </Menu.Item>
-          <Menu.Item position="right">
+          <Menu className="bg-dark" inverted floated="right">
             {isAuthenticated ? (
-              <NaviSignedIn signOut={handleSingOut} />
+              <Menu.Item>
+                <NaviSignedIn signOut={handleSingOut} />
+              </Menu.Item>
             ) : (
-              <NaviSignedOut signIn={handleSingIn} />
+              <Menu.Item>
+                <NaviSignedOut signIn={handleSingIn} />
+              </Menu.Item>
             )}
-          </Menu.Item>
+          </Menu>
         </Container>
       </Menu>
     </div>

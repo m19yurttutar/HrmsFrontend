@@ -5,15 +5,20 @@ import "./Navi.css";
 
 export default function NaviSignedOut(props) {
   return (
-    <div className="mx-2">
-      <Button animated="vertical" color="grey" as={Link} to="/register">
+    <div>
+      <Button
+        className="mr-4"
+        animated="vertical"
+        color="grey"
+        as={Link}
+        to="/register"
+      >
         <Button.Content visible>Üye Ol</Button.Content>
         <Button.Content hidden>
           <Icon name="signup" />
         </Button.Content>
       </Button>
       <Button
-        className="ml-4"
         animated="vertical"
         color="grey"
         onClick={props.signIn}

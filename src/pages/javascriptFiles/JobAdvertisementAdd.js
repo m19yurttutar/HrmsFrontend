@@ -10,7 +10,7 @@ import * as Yup from "yup";
 import { Container, Form, Label } from "semantic-ui-react";
 import { toast } from "react-toastify";
 
-export default function JobAdCreate() {
+export default function JobAdvertisementAdd() {
   const [workingTimes, setWorkingTimes] = useState([]);
   const [workingTypes, setWorkingTypes] = useState([]);
   const [cities, setCities] = useState([]);
@@ -128,7 +128,7 @@ export default function JobAdCreate() {
     <div>
       <Container className="AddJobAdvertisementContainer">
         <Form inverted id="addJobAdvertisementForm" onSubmit={formik.handleSubmit}>
-          <Form.Field className="Header">
+          <Form.Field className="text-center">
             <Label size="massive" color="violet" content="Yeni İş İlanı"></Label>
           </Form.Field>
           <Form.Field className="mt-4">
