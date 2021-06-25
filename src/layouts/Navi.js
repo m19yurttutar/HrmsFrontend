@@ -3,13 +3,18 @@ import React, { useState } from "react";
 import "./Navi.css";
 import NaviSignedOut from "./NaviSignedOut";
 import NaviSignedIn from "./NaviSignedIn";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { useSelector } from "react-redux";
+import Favorites from "./Favorites";
 
 export default function Navi() {
+  const { favoritesItems } = useSelector((state) => state.favorites)
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const history = useHistory()
 
   function handleSingOut() {
     setIsAuthenticated(false);
+    history.push("/")
   }
 
   function handleSingIn() {
@@ -36,6 +41,7 @@ export default function Navi() {
             <h5 className="mx-3 font-weight-bold text-white">Pozisyonlar</h5>
           </Menu.Item>
           <Menu className="bg-dark" inverted floated="right">
+            {favoritesItems.length > 0 && <Favorites/>}
             {isAuthenticated ? (
               <Menu.Item>
                 <NaviSignedIn signOut={handleSingOut} />

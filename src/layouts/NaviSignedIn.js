@@ -19,8 +19,6 @@ export default function NaviSignedIn(props) {
         <Dropdown.Menu>
           <Dropdown.Item text="Bilgilerim" icon="info" />
           <Dropdown.Item
-            as={Link}
-            to="/"
             onClick={props.signOut}
             text="Çıkış Yap"
             icon="sign-out"

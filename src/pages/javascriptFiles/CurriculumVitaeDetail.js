@@ -306,10 +306,8 @@ export default function CurriculumVitaeDetail() {
             </Accordion>
           </Grid.Column>
           <Grid.Column width="4">
-            <Sticky>
               <Image fluid src={curriculumVitae.jobSeeker?.profilePhoto.url} />
               <Button as={Link} to={`/curriculumVitae/update/${curriculumVitae.id}`} className="mt-4" fluid color="green" content="Özgeçmişi Düzenle"/>
-            </Sticky>
           </Grid.Column>
         </Grid>
       </Container>

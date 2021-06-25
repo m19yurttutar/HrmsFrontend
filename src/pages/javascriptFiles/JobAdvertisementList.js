@@ -1,17 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  Item,
-  ItemImage,
-  Label,
-  LabelGroup,
-  Menu,
-} from "semantic-ui-react";
+import { Item, ItemImage, Label, LabelGroup, Menu } from "semantic-ui-react";
 import JobAdvertisementService from "../../services/JobAdvertisementService";
 import "../cssFiles/JobAdvertisementList.css";
+import HrmsPagination from "../../utilities/pagination/HrmsPagination";
 
 export default function JobAdvertisementList() {
   const [jobAdvertisements, setJobAdvertisements] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [jobAdvertisementsPerPage, setJobAdvertisementsPerPage] = useState(10);
+
+  const indexOfLastJobAdvertisement = currentPage * jobAdvertisementsPerPage;
+  const indexOfFirstJobAdvertisement =
+    indexOfLastJobAdvertisement - jobAdvertisementsPerPage;
+  const currentJobAdvertisements = jobAdvertisements.slice(
+    indexOfFirstJobAdvertisement,
+    indexOfLastJobAdvertisement
+  );
 
   useEffect(() => {
     let jobAdvertisementService = new JobAdvertisementService();
@@ -21,12 +26,12 @@ export default function JobAdvertisementList() {
       .catch();
   }, []);
 
+  const paginate = (activePage) => setCurrentPage(activePage);
+
   return (
     <div>
       <Menu inverted className="bg-dark">
-        <Menu.Item className="MenuItem">
-          Sırala
-        </Menu.Item>
+        <Menu.Item className="MenuItem">Sırala</Menu.Item>
         <Menu.Item className="MenuItem" link>
           Maaş bilgisine göre
         </Menu.Item>
@@ -38,7 +43,7 @@ export default function JobAdvertisementList() {
         </Menu.Item>
       </Menu>
       <Item.Group>
-        {jobAdvertisements.map((jobAdvertisement) => (
+        {currentJobAdvertisements.map((jobAdvertisement) => (
           <Item
             key={jobAdvertisement.id}
             className="bg-dark rounded px-3 py-3"
@@ -86,6 +91,14 @@ export default function JobAdvertisementList() {
           </Item>
         ))}
       </Item.Group>
+      <HrmsPagination
+        totalJobAdvertisements={jobAdvertisements.length}
+        jobAdvertisementsPerPage={jobAdvertisementsPerPage}
+        setJobAdvertisementsPerPage={(jobAdvertisementsPerPage) =>
+          setJobAdvertisementsPerPage(jobAdvertisementsPerPage)
+        }
+        paginate={paginate}
+      />
     </div>
   );
 }

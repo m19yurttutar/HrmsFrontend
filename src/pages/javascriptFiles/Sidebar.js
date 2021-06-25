@@ -4,12 +4,18 @@ import CityService from "../../services/CityService";
 import JobPositionService from "../../services/JobPositionService";
 import EmployerService from "../../services/EmployerService";
 
-export default function Sidebar() {
-  const [activeIndex, setActiveIndex] = useState(-1);
+export default function Sidebar({ handleFilter }) {
+  const [cityFilterActivityIndex, setCityFilterActivityIndex] = useState(0)
+  const [jobPositionFilterActivityIndex, setJobPositionFilterActivityIndex] = useState(0)
+  const [employerFilterActivityIndex, setEmployerFilterActivityIndex] = useState(0)
 
   const [cities, setCities] = useState([]);
   const [jobPositions, setJobPositions] = useState([]);
   const [employers, setEmployers] = useState([]);
+  
+  const [filterCityValue, setFilterCityValue] = useState("")
+  const [filterJobPositionValue, setFilterJobPositionValue] = useState("")
+  const [filterEmployerValue, setFilterEmployerValue] = useState("")
 
   useEffect(() => {
     let cityService = new CityService();
@@ -28,9 +34,9 @@ export default function Sidebar() {
       .then((result) => setEmployers(result.data.data));
   }, []);
 
-  const cityOptions = [{ key: 0, value: null, text: "Şehir Seç" }];
-  const jobPositionOptions = [{ key: "0", value: null, text: "Pozisyon Seç" }];
-  const employerOptions = [{ key: "0", value: null, text: "Şirket Seç" }];
+  const cityOptions = [];
+  const jobPositionOptions = [];
+  const employerOptions = [];
 
   cities.forEach((city) => {
     cityOptions.push({
@@ -54,27 +60,27 @@ export default function Sidebar() {
     });
   });
 
-  function handleCityFilterActivityIndex(params){
-    if(activeIndex === 0){
-      setActiveIndex(-1)
+  function handleCityFilterActivityIndex(){
+    if(cityFilterActivityIndex === 0){
+      setCityFilterActivityIndex(1)
     }else{
-      setActiveIndex(0)
+      setCityFilterActivityIndex(0)
     }
   }
 
-  function handleJoPositionFilterActivityIndex(params){
-    if(activeIndex === 1){
-      setActiveIndex(-1)
+  function handleJobPositionFilterActivityIndex(){
+    if(jobPositionFilterActivityIndex === 0){
+      setJobPositionFilterActivityIndex(1)
     }else{
-      setActiveIndex(1)
+      setJobPositionFilterActivityIndex(0)
     }
   }
 
-  function handleEmployerFilterActivityIndex(params){
-    if(activeIndex === 2){
-      setActiveIndex(-1)
+  function handleEmployerFilterActivityIndex(){
+    if(employerFilterActivityIndex === 0){
+      setEmployerFilterActivityIndex(1)
     }else{
-      setActiveIndex(2)
+      setEmployerFilterActivityIndex(0)
     }
   }
 
@@ -85,18 +91,20 @@ export default function Sidebar() {
           <Accordion.Title
             className="text-white font-weight-bold"
             content="Şehirler"
-            active={activeIndex === 0}
+            active={cityFilterActivityIndex === 1}
             onClick={handleCityFilterActivityIndex}
             index={0}
           />
-          <Accordion.Content className="text-white" active={activeIndex === 0}>
+          <Accordion.Content className="text-white" active={cityFilterActivityIndex === 1}>
             <Dropdown
               className="mt-3"
               placeholder="Şehir Seç"
               fluid
               search
               selection
+              clearable
               options={cityOptions}
+              onChange={(e, { value }) => setFilterCityValue(value)}
             />
           </Accordion.Content>
         </Menu.Item>
@@ -104,18 +112,20 @@ export default function Sidebar() {
           <Accordion.Title
             className="text-white font-weight-bold"
             content="İş Pozisyonları"
-            active={activeIndex === 1}
-            onClick={handleJoPositionFilterActivityIndex}
+            active={jobPositionFilterActivityIndex === 1}
+            onClick={handleJobPositionFilterActivityIndex}
             index={1}
           />
-          <Accordion.Content className="text-white" active={activeIndex === 1}>
+          <Accordion.Content className="text-white" active={jobPositionFilterActivityIndex === 1}>
             <Dropdown
               className="mt-3"
               placeholder="Pozisyon Seç"
               fluid
               search
               selection
+              clearable
               options={jobPositionOptions}
+              onChange={(e, { value }) => setFilterJobPositionValue(value)}
             />
           </Accordion.Content>
         </Menu.Item>
@@ -123,25 +133,25 @@ export default function Sidebar() {
           <Accordion.Title
             className="text-white font-weight-bold"
             content="Şirketler"
-            active={activeIndex === 2}
+            active={employerFilterActivityIndex === 1}
             onClick={handleEmployerFilterActivityIndex}
             index={2}
           />
-          <Accordion.Content className="text-white" active={activeIndex === 2}>
+          <Accordion.Content className="text-white" active={employerFilterActivityIndex === 1}>
             <Dropdown
               className="mt-3"
               placeholder="Şirket Seç"
               fluid
               search
               selection
+              clearable
               options={employerOptions}
+              onChange={(e, { value }) => setFilterEmployerValue(value)}
             />
           </Accordion.Content>
         </Menu.Item>
       </Accordion>
-      <Button className="bg-dark text-white" fluid>
-        Filtrele
-      </Button>
+      <Button className="bg-dark text-white" fluid content="Filtrele" onClick={() => handleFilter({ cityId: filterCityValue, jobPositionId: filterJobPositionValue, employerId: filterEmployerValue })}/>
     </div>
   );
 }

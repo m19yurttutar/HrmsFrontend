@@ -38,7 +38,8 @@ export default function CurriculumVitaeUpdate() {
   const [schoolActivityIndex, setSchoolActivityIndex] = useState(0);
   const [languagesActivityIndex, setLanguagesActivityIndex] = useState(0);
   const [skillsActivityIndex, setSkillsActivityIndex] = useState(0);
-  const [workExperiencesActivityIndex, setWorkExperiencesActivityIndex] = useState(0);
+  const [workExperiencesActivityIndex, setWorkExperiencesActivityIndex] =
+    useState(0);
 
   const initialValues = {
     githubAccountLink: "",
@@ -106,6 +107,40 @@ export default function CurriculumVitaeUpdate() {
       }
     });
   }
+
+  function handleSchoolDelete(school) {
+    var isConfirmed = window.confirm("Silmek istediğinize emin misiniz ?");
+    if (isConfirmed) {
+      let schoolService = new SchoolService();
+      schoolService.delete(school).then((response) =>
+        toast.error(response.data.message, {
+          position: "bottom-right",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: false,
+        })
+      );
+    }
+  }
+
+  function handleLanguageDelete(language) {
+    var isConfirmed = window.confirm("Silmek istediğinize emin misiniz ?");
+    if (isConfirmed) {
+      let languageService = new LanguageService();
+      languageService.delete(language).then((response) =>
+        toast.error(response.data.message, {
+          position: "bottom-right",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: false,
+        })
+      );
+    }
+  }
+
+  function handleSkillDelete() {}
+
+  function handleWorkExperienceDelete() {}
 
   return (
     <div>
@@ -216,7 +251,11 @@ export default function CurriculumVitaeUpdate() {
                             : school.graduationYear}
                         </Table.Cell>
                         <Table.Cell verticalAlign="middle">
-                          <Button fluid color="red">
+                          <Button
+                            onClick={() => handleSchoolDelete(school)}
+                            fluid
+                            color="red"
+                          >
                             Sil
                           </Button>
                         </Table.Cell>
@@ -282,7 +321,11 @@ export default function CurriculumVitaeUpdate() {
                           />
                         </Table.Cell>
                         <Table.Cell verticalAlign="middle">
-                          <Button fluid color="red">
+                          <Button
+                            onClick={() => handleLanguageDelete(language)}
+                            fluid
+                            color="red"
+                          >
                             Sil
                           </Button>
                         </Table.Cell>
